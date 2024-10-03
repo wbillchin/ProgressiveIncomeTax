@@ -24,22 +24,51 @@ class IncomeTaxCalculator
         double payrollTaxesPaid = double.Parse(Console.ReadLine());
 
         // Calculate total tax
+        double totalTax = CalculateTax(income, brackets, rates);
 
         // Calculate taxes due
+        double taxesDue = totalTax - payrollTaxesPaid;
 
         // Display results
-        //Console.WriteLine($"\nTotal federal tax on an income of {income:C} is {totalTax:C}");
+        Console.WriteLine($"\nTotal federal tax on an income of {income:C} is {totalTax:C}");
 
-
-        //Console.WriteLine($"You owe {taxesDue:C} in taxes.");
-
-        //Console.WriteLine($"You are due a refund of {-taxesDue:C}.");
+        if (taxesDue > 0)
+        {
+            Console.WriteLine($"You owe {taxesDue:C} in taxes.");
+        } else
+        {
+            Console.WriteLine($"You are due a refund of {-taxesDue:C}.");
+        }
 
     }
 
     static double CalculateTax(double income, double[] brackets, double[] rates)
     {
         double tax = 0;
+        double previousBracketLimit = 0;
+
+        // Loop through each bracket
+        for (int bracketCounter = 0; bracketCounter < brackets.Length; bracketCounter++)
+        {
+            if (income > brackets[bracketCounter])
+            {
+                // Tax the amount within this bracket
+                tax += (brackets[bracketCounter] - previousBracketLimit) * rates[bracketCounter];
+                previousBracketLimit = brackets[bracketCounter];
+            }
+            else
+            {
+                // If income falls within this bracket
+                tax += (income - previousBracketLimit) * rates[bracketCounter];
+                return tax;
+            }
+        }
+
+        // Tax the remaining income (if it exceeds the last bracket)
+        if (income > previousBracketLimit)
+        {
+            tax += (income - previousBracketLimit) * rates[brackets.Length];
+        }
 
         return tax;
     }
