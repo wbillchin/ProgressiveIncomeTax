@@ -46,9 +46,10 @@ class IncomeTaxCalculator
     {
         double tax = 0;
         double previousBracketLimit = 0;
+        const int bracketMaxCount = 6;
 
         // Loop through each bracket
-        for (int bracketCounter = 0; bracketCounter < brackets.Length; bracketCounter++)
+        for (int bracketCounter = 0; bracketCounter < bracketMaxCount; bracketCounter++)
         {
             if (income > brackets[bracketCounter])
             {
